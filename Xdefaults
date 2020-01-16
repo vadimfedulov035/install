@@ -1,0 +1,10 @@
+*.font: Liberation Mono:pixelsize=16:antialias=true:autohint=true;
+*.alpha: 0.85
+*.color0: #28282b
+*.color1: #ff3e33
+*.color2: #67c537
+*.color3: #ffa64b
+*.color4: #369fdf
+*.color5: #d35bfd
+*.color6: #3ce5a5
+*.color7: #fff
