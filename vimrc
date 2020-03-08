@@ -4,11 +4,9 @@ Plug 'rafi/awesome-vim-colorschemes'
 Plug 'jiangmiao/auto-pairs'
 Plug 'tpope/vim-fugitive'
 Plug 'airblade/vim-gitgutter'
-Plug 'easymotion/vim-easymotion'
 Plug 'ctrlpvim/ctrlp.vim'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
-Plug 'scrooloose/syntastic'
 call plug#end()
 
 set statusline+=%#warningmsg#
@@ -34,16 +32,6 @@ set incsearch
 colorscheme nord
 let g:airline_theme='cobalt2'
 
-map <Leader> <Plug>(easymotion-prefix)
 map <C-n> :NERDTreeToggle<CR>
 map <C-p> :CtrlP<CR>
 map <C-g> :Gstatus<CR>
-
-nnoremap <up>    <nop>
-nnoremap <down>  <nop>
-nnoremap <left>  <nop>
-nnoremap <right> <nop>
-inoremap <up>    <nop>
-inoremap <down>  <nop>
-inoremap <left>  <nop>
-inoremap <right> <nop>

@@ -114,8 +114,6 @@ lc () {
 
 alias torb="cd ~/.browser && ./start-tor-browser.desktop"
 alias firefoxb="firefox-esr"
-alias vimsh="cp ~/.vim/vimsh ~/.vim/vimrc"
-alias vimpy="cp ~/.vim/vimpy ~/.vim/vimrc"
 
 export PATH=/usr/local/cuda-10.1/bin${PATH:+:${PATH}}$ 
 export LD_LIBRARY_PATH=/usr/local/cuda-10.1/lib64${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}
