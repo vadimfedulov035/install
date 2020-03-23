@@ -4,7 +4,10 @@ printf "\n\n [?] Survey has been started\n\n\n"
 
 read -p "What is your nickname?: " nick
 read -p "Do you want to install tools? (yes/no): " stools
-read -p "Do you want to download libraries? (yes/no) " libs
+read -p "Do you want to download libraries? (yes/no): " libs
+read -p "Do you want to install suckless utilities? (yes/no): " sless
+if [ "$sless" = "yes" ]; then
+        read -p "What gap size do you want in DWM? (num): " gappx
 read -p "Do you want to install TOR browser? (yes/no): " torb
 read -p "Do you want to install Python? (yes/no): " python
 if [ "$python" = "yes" ]; then
@@ -23,8 +26,8 @@ if [ "$stools" = "yes" ]; then
 	sed -i '15a deb http://deb.debian.org/debian buster-backports main contrib non-free' /etc/apt/sources.list
 	apt update -y
 	apt upgrade -y
-	apt install build-essential lightdm-gtk-greeter-settings nvidia-driver nvidia-smi nvidia-xconfig nvidia-cuda-toolkit ocl-icd-libopencl1 net-tools zsh tmux git info neofetch -y
-	apt install htop glances strace psmisc simple-scan curl wget lsof tree exiftool fping -y
+	apt install build-essential lightdm lightdm-gtk-greeter-settings nvidia-driver nvidia-smi nvidia-xconfig nvidia-cuda-toolkit ocl-icd-libopencl1 net-tools zsh tmux git info neofetch -y
+	apt install htop glances strace psmisc simple-scan curl wget lsof tree exiftool -y
 	apt install ffmpeg shntool feh sxiv mpv gimp imagemagick jpegoptim zathura -y
 	apt install adb fastboot transmission gmtp bleachbit redshift flameshot -y
 	mkdir /home/$nick/inst
@@ -54,6 +57,28 @@ if [ "$libs" = "yes" ]; then
 	#ln -s /opt/pypy3/bin/pypy3 /usr/local/bin/pypy3
 	#ln -s /opt/pypy3/bin/pypy3 /usr/bin/pypy3
 
+fi
+
+if [ "$sless" = "yes" ]; then
+        apt install build-essential compton -y
+        wget https://dl.suckless.org/dwm/dwm-6.2.tar.gz
+        git clone https://github.com/lukesmithxyz/st
+        tar xvf dwm-6.2.tar.gz
+        cd dwm-6.2
+        wget https://dwm.suckless.org/patches/fullgaps/dwm-fullgaps-6.2.diff
+        wget https://dwm.suckless.org/patches/fakefullscreen/dwm-fakefullscreen-20170508-ceac8c9.diff
+        patch < dwm-fullgaps-6.2.diff
+        patch < dwm-fakefullscreen-20170508-ceac8c9.diff
+        rm *.diff
+        make -j$(nproc)
+        sed -i "5c static const unsigned int gappx     = $gappx;        /* gaps between windows */"
+        sed -i "48c \#define MODKEY Mod4Mask" config.h
+        make install
+        cd ../st
+        make -j$(nproc)
+        make install
+        cd ..
+        rm -r st dwm*
 fi
 
 if [ "$torb" = "yes" ]; then
