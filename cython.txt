@@ -1,5 +1,0 @@
-Cythonize code:
-cython3 -3 --embed cat.py -o cat.c
-
-Make static standalone executable:
-sudo gcc -O3 -static -static-libgcc -static-libstdc++ cat.c -I /usr/include/python3.7m /usr/lib/x86_64-linux-gnu/libpython3.7m.a /usr/lib/x86_64-linux-gnu/libexpat.a /usr/lib/x86_64-linux-gnu/libz.a /usr/lib/x86_64-linux-gnu/libpthread.a /usr/lib/x86_64-linux-gnu/libdl.a /usr/lib/x86_64-linux-gnu/libutil.a /usr/lib/x86_64-linux-gnu/libm.a /usr/lib/x86_64-linux-gnu/libc.a -o cat.exe

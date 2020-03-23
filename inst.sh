@@ -8,11 +8,11 @@ read -p "Do you want to download libraries? (yes/no) " libs
 read -p "Do you want to install TOR browser? (yes/no): " torb
 read -p "Do you want to install Python? (yes/no): " python
 if [ "$python" = "yes" ]; then
-	read -p "Install or compile Python? 0 or 1?" icp
+	read -p "Install or compile Python? 0 or 1?: " icp
 fi
 read -p "Do you want to install VIM as Python IDE? (yes/no): " vim
 if [ "$vim" = "yes" ]; then
-	read -p "Install or compile VIM? 0 or 1?" icv
+	read -p "Install or compile VIM? 0 or 1?: " icv
 fi
 
 printf "\n\n [.] Survey has been ended\n\n\n"
@@ -23,8 +23,8 @@ if [ "$stools" = "yes" ]; then
 	sed -i '15a deb http://deb.debian.org/debian buster-backports main contrib non-free' /etc/apt/sources.list
 	apt update -y
 	apt upgrade -y
-	apt install build-essential lightdm-gtk-greeter-settings nvidia-driver nvidia-smi nvidia-xconfig nvidia-cuda-toolkit ocl-icd-libopencl1 zsh tmux git info neofetch -y
-	apt install htop glances strace psmisc curl wget lsof tree exiftool fping -y
+	apt install build-essential lightdm-gtk-greeter-settings nvidia-driver nvidia-smi nvidia-xconfig nvidia-cuda-toolkit ocl-icd-libopencl1 net-tools zsh tmux git info neofetch -y
+	apt install htop glances strace psmisc simple-scan curl wget lsof tree exiftool fping -y
 	apt install ffmpeg shntool feh sxiv mpv gimp imagemagick jpegoptim zathura -y
 	apt install adb fastboot transmission gmtp bleachbit redshift flameshot -y
 	mkdir /home/$nick/inst
@@ -46,13 +46,13 @@ if [ "$libs" = "yes" ]; then
 	cd /home/"nick"/LIBS
 	wget https://bootstrap.pypa.io/get-pip.py
 	wget https://developer.nvidia.com/compute/cuda/10.1/Prod/local_installers/cuda_10.1.105_418.39_linux.run
-	wget https://bitbucket.org/pypy/pypy/downloads/pypy3.6-v7.3.0-linux64.tar.bz2
-	rm -rf /opt/pypy3 /usr/local/bin/pypy3 /usr/bin/pypy3
-	tar -x -C /opt -f pypy3.6-v7.3.0-linux64.tar.bz2
-	rm -rf pypy3.6-v7.3.0-linux64.tar.bz2
-	mv /opt/pypy3.6-v7.3.0-linux64 /opt/pypy3
-	ln -s /opt/pypy3/bin/pypy3 /usr/local/bin/pypy3
-	ln -s /opt/pypy3/bin/pypy3 /usr/bin/pypy3
+	#wget https://bitbucket.org/pypy/pypy/downloads/pypy3.6-v7.3.0-linux64.tar.bz2
+	#rm -rf /opt/pypy3 /usr/local/bin/pypy3 /usr/bin/pypy3
+	#tar -x -C /opt -f pypy3.6-v7.3.0-linux64.tar.bz2
+	#rm -rf pypy3.6-v7.3.0-linux64.tar.bz2
+	#mv /opt/pypy3.6-v7.3.0-linux64 /opt/pypy3
+	#ln -s /opt/pypy3/bin/pypy3 /usr/local/bin/pypy3
+	#ln -s /opt/pypy3/bin/pypy3 /usr/bin/pypy3
 
 fi
 
@@ -68,20 +68,20 @@ if [ "$torb" = "yes" ]; then
 fi
 
 if [ "$python" = "yes" ]; then
-	apt install zlib1g-dev lib6c-dev libssl-dev -y
-	if [ "$ic" = 0 ]; then
+	apt install zlib1g-dev libcap-dev libexpat-dev libssl-dev -y
+	if [ "$icp" = 0 ]; then
 		rm -rf /usr/bin/lsb_release
-		apt install libpcap-dev libssl-dev libexpat1-dev zlib1g-dev libc6-dev python2.7-dev python3.7-dev cython cython3 -y
-	elif [ "$ic" = 1 ]; then
+		apt install python2.7-dev python3.7-dev -y
+	elif [ "$icp" = 1 ]; then
 		apt install libbz2-dev liblzma-dev libncurses5-dev libncursesw5-dev libgdbm-dev libnss3-dev libreadline-dev libffi-dev tk-dev libsqlite3-dev -y
-		wget https://www.python.org/ftp/python/3.7.3/Python-3.7.3.tar.xz
-		tar xvf Python-3.7.3.tar.xz
-		cd Python-3.7.3
+		wget https://www.python.org/ftp/python/3.8.2/Python-3.8.2.tar.xz
+		tar xvf Python-3.8.2.tar.xz
+		cd Python-3.8.2
 		./configure --prefix=/usr --enable-loadable-sqlite-extensions --enable-shared --with-lto --enable-optimizations --enable-ipv6 --with-pydebug
 		make -j$(nproc)
 		make altinstall
 		cd ..
-		rm -rf Python-3.7.3*
+		rm -rf Python-3.8.2*
 	fi
 fi
 
