@@ -76,7 +76,7 @@ fi
 
 if [ "$torb" = "yes" ]; then
 	apt install tor libdbus-glib-1-2 -y
-    wget https://www.torproject.org/dist/torbrowser/9.0.7/tor-browser-linux64-9.0.7_en-US.tar.xz
+	wget https://www.torproject.org/dist/torbrowser/9.0.7/tor-browser-linux64-9.0.7_en-US.tar.xz
 	tar xvf tor-browser-linux64-9.0.7_en-US.tar.xz
 	rm -rf /home/$nick/.browser
 	mv -v tor-browser_en-US /home/$nick/.browser
@@ -86,16 +86,16 @@ if [ "$torb" = "yes" ]; then
 fi
 
 if [ "$python" = "yes" ]; then
+	rm -rf /usr/bin/lsb_release
 	if [ "$icp" = 0 ]; then
-		rm -rf /usr/bin/lsb_release
 		apt install python2.7-dev python3.7-dev -y
 	elif [ "$icp" = 1 ]; then
-		apt install zlib1g-dev libbz2-dev libncurses5-dev libgdbm-dev libssl-dev libnss3-dev libreadline-dev libffi-dev tk-dev libsqlite3-dev -y
+		apt install zlib1g-dev libbz2-dev liblzma-dev libncurses5-dev libgdbm-dev libssl-dev libnss3-dev libreadline-dev libffi-dev tk-dev libsqlite3-dev -y
 		wget https://www.python.org/ftp/python/3.8.2/Python-3.8.2.tar.xz
 		tar xvf Python-3.8.2.tar.xz
 		cd Python-3.8.2
 		./configure --prefix=/usr --enable-loadable-sqlite-extensions --enable-shared --enable-optimizations --with-lto --enable-ipv6 --with-pydebug
-		make -j$(nproc)
+		make -j
 		make altinstall
 		cd ..
 		rm -rf Python-3.8.2*
