@@ -52,6 +52,28 @@ if [ "$libs" = "yes" ]; then
 	wget https://developer.nvidia.com/compute/cuda/10.1/Prod/local_installers/cuda_10.1.105_418.39_linux.run
 fi
 
+if [ "$sless" = "yes" ]; then
+        apt install compton -y
+        wget https://dl.suckless.org/dwm/dwm-6.2.tar.gz
+        git clone https://github.com/lukesmithxyz/st
+        tar xvf dwm-6.2.tar.gz
+        cd dwm-6.2
+        wget https://dwm.suckless.org/patches/fullgaps/dwm-fullgaps-6.2.diff
+        wget https://dwm.suckless.org/patches/fakefullscreen/dwm-fakefullscreen-20170508-ceac8c9.diff
+        patch < dwm-fullgaps-6.2.diff
+        patch < dwm-fakefullscreen-20170508-ceac8c9.diff
+        rm *.diff
+        make -j$(nproc)
+        sed -i "5c static const unsigned int gappx     = $gappx;        /* gaps between windows */"
+        sed -i "48c \#define MODKEY Mod4Mask" config.h
+        make install
+        cd ../st
+        make -j$(nproc)
+        make install
+        cd ..
+        rm -r st dwm*
+fi
+
 if [ "$torb" = "yes" ]; then
 	apt install tor libdbus-glib-1-2 -y
 	wget https://www.torproject.org/dist/torbrowser/9.0.9/tor-browser-linux64-9.0.9_en-US.tar.xz
