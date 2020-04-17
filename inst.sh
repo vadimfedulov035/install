@@ -35,11 +35,8 @@ if [ "$stools" = "yes" ]; then
 	apt install zsh git tmux net-tools info htop glances strace psmisc simple-scan curl wget lsof tree exiftool neofetch -y  # download programs for operating the system
 	apt install ffmpeg shntool feh sxiv mpv gimp imagemagick jpegoptim zathura -y  # download programs for working with media
 	apt install adb fastboot transmission gmtp bleachbit redshift flameshot -y  # download programs for working with other devices and keeping system safe
-	mkdir /home/$nick/.atoi && cd /home/$nick/.atoi  # make dir for atoi; go to dir
-	rm -rf /usr/bin/lf /usr/bin/gotop  # preremove for reinstallation
 	wget https://github.com/gokcehan/lf/releases/download/r13/lf-linux-amd64.tar.gz && tar xvf lf-linux-amd64.tar.gz && mv -v lf /usr/bin  # download, untar archive; install program
 	chmod 755 /usr/bin/lf && chown root:root /usr/bin/lf  # change permissions to needed
-	rm -rf *  # wipe atoi dir
 fi
 
 if [ "$libs" = "yes" ]; then
@@ -59,7 +56,6 @@ if [ "$gtools" = "yes" ]; then
 		make -j && make install-strip  # compile compiler and install
 		cd ..
 		rm -rf /usr/bin/gcc && ln -s /usr/bin/gcc-9.3 /usr/bin/gcc  # make gcc-9.3 default system compiler
-		rm -rf *  # wipe atoi dir
 	fi
 fi
 
@@ -69,24 +65,23 @@ if [ "$sless" = "yes" ]; then
 	wget https://dl.suckless.org/dwm/dwm-6.2.tar.gz && tar xvf dwm-6.2.tar.gz && cd dwm-6.2  # download, untar archive; go to dir
 	wget https://dwm.suckless.org/patches/fullgaps/dwm-fullgaps-6.2.diff && patch < dwm-fullgaps-6.2.diff  # apply first patch
 	wget https://dwm.suckless.org/patches/fakefullscreen/dwm-fakefullscreen-20170508-ceac8c9.diff && patch < dwm-fakefullscreen-20170508-ceac8c9.diff  # apply second patch
+	make -j  # compile
 	sed -i "5c static const unsigned int gappx     = $gappx;        /* gaps between windows */"  # set gapp
 	sed -i "48c \#define MODKEY Mod4Mask" config.h  # change MODKEY for Windows
-	make -j && make install  # install
+	make install  # install
 	cd ..
 	### ST ###
 	git clone https://github.com/lukesmithxyz/st && cd st  # download; go to dir
 	make -j && make install  # install
 	cd ..
-	rm -rf *  # wipe atoi dir
 fi
 
 if [ "$torb" = "yes" ]; then
 	apt install tor libdbus-glib-1-2 -y  # install needed prerequisites
-	rm -rf /home/$nick/.browser  # preremove for reinstallation
+	rm -rf /home/$nick/.browser  # remove for reinstallation
 	wget https://www.torproject.org/dist/torbrowser/9.0.9/tor-browser-linux64-9.0.9_en-US.tar.xz && tar xvf tor-browser-linux64-9.0.9_en-US.tar.xz  # download, untar archive; 
 	mv -v tor-browser_en-US /home/$nick/.browser
 	chmod -R 755 /home/$nick/.browser && chown -R $nick:$nick /home/$nick/.browser  # change permissions
-	rm -rf *  # wipe atoi dir
 fi
 
 if [ "$py" = "yes" ]; then
@@ -98,14 +93,13 @@ if [ "$py" = "yes" ]; then
 		wget https://www.python.org/ftp/python/3.8.2/Python-3.8.2.tar.xz && tar xvf Python-3.8.2.tar.xz && cd Python-3.8.2  # download, untar archive; go to dir
 		./configure --prefix=/usr --enable-loadable-sqlite-extensions --enable-shared --enable-optimizations --with-lto --enable-ipv6 --with-pydebug
 		make -j && make altinstall  # install
-		cd ..
 		rm -rf /usr/bin/python3 && ln -s /usr/bin/python3.8 /usr/bin/python3  # make python3.8 default python3
-		rm -rf *  # wipe atoi dir
+		cd ..
 	fi
 fi
 
 if [ "$vim" = "yes" ]; then
-	rm -rf /home/$nick/.vim  # preremove for reinstallation
+	rm -rf /home/$nick/.vim  # remove for reinstallation
 	mkdir -p /home/$nick/.vim/autoload  # make dir
 	wget https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim -O /home/$nick/.vim/autoload/plug.vim
 	chown -R $nick:$nick /home/$nick/.vim  # change permissions
@@ -116,9 +110,10 @@ if [ "$vim" = "yes" ]; then
 		./configure --prefix=/usr --with-features=huge --enable-pythoninterp --enable-optimizations
 		make -j && make install  # install
 		cd ..
-		rm -rf *  # wipe atoi dir
 	fi
 fi
+
+rm -rf lf* tor* dwm* st Python*  # remove all trash
 
 nvidia-xconfig --cool-bits=4  # activate NVIDIA FAN control
 
