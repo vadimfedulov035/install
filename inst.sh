@@ -35,19 +35,17 @@ if [ "$stools" = "yes" ]; then
 	apt install zsh git tmux net-tools info htop glances strace psmisc simple-scan curl wget lsof tree exiftool neofetch -y  # download programs for operating the system
 	apt install ffmpeg shntool feh sxiv mpv gimp imagemagick jpegoptim zathura -y  # download programs for working with media
 	apt install adb fastboot transmission gmtp bleachbit redshift flameshot -y  # download programs for working with other devices and keeping system safe
-	mkdir /home/$nick/autoi && cd /home/$nick/autoi  # make dir for atoi; go to dir
+	mkdir /home/$nick/.atoi && cd /home/$nick/.atoi  # make dir for atoi; go to dir
 	rm -rf /usr/bin/lf /usr/bin/gotop  # preremove for reinstallation
 	wget https://github.com/gokcehan/lf/releases/download/r13/lf-linux-amd64.tar.gz && tar xvf lf-linux-amd64.tar.gz && mv -v lf /usr/bin  # download, untar archive; install program
-	git clone --depth 1 https://github.com/cjbassi/gotop && scripts/download.sh && mv -v gotop /usr/bin  # download script for download; install program
-	chmod 755 /usr/bin/lf /usr/bin/gotop && chown root:root /usr/bin/lf /usr/bin/gotop  # change permissions to needed
+	chmod 755 /usr/bin/lf && chown root:root /usr/bin/lf  # change permissions to needed
 	rm -rf *  # wipe atoi dir
 fi
 
 if [ "$libs" = "yes" ]; then
-	mkdir /home/$nick/libs && cd /home/$nick/libs
-	wget https://bootstrap.pypa.io/get-pip.py  # download get-pip.py
-	wget https://developer.nvidia.com/compute/cuda/10.1/Prod/local_installers/cuda_10.1.105_418.39_linux.run  # download latest compatible CUDA
-	cd -  # go to atoi dir back
+	mkdir /home/$nick/libs
+	wget https://bootstrap.pypa.io/get-pip.py -O /home/$nick/libs/get-pip.py  # download get-pip.py
+	wget https://developer.nvidia.com/compute/cuda/10.1/Prod/local_installers/cuda_10.1.105_418.39_linux.run -O /home/$nick/libs/cuda_10.1.run  # download latest compatible CUDA
 fi
 
 if [ "$gtools" = "yes" ]; then
@@ -60,25 +58,25 @@ if [ "$gtools" = "yes" ]; then
 		../gcc-9.3.0/configure -v --build=x86_64-linux-gnu --host=x86_64-linux-gnu --target=x86_64-linux-gnu --prefix=/usr --enable-checking=release --enable-languages=c,c++ --disable-multilib --program-suffix=-9.3
 		make -j && make install-strip  # compile compiler and install
 		cd ..
-		rm -rf *  # wipe atoi dir
 		rm -rf /usr/bin/gcc && ln -s /usr/bin/gcc-9.3 /usr/bin/gcc  # make gcc-9.3 default system compiler
+		rm -rf *  # wipe atoi dir
 	fi
 fi
 
 if [ "$sless" = "yes" ]; then
-        apt install compton libxinerama-dev -y  # install needed prerequisites
+	apt install compton libxinerama-dev -y  # install needed prerequisites
 	### DWM ###
-        wget https://dl.suckless.org/dwm/dwm-6.2.tar.gz && tar xvf dwm-6.2.tar.gz && cd dwm-6.2  # download, untar archive; go to dir
-        wget https://dwm.suckless.org/patches/fullgaps/dwm-fullgaps-6.2.diff && patch < dwm-fullgaps-6.2.diff  # apply first patch
-        wget https://dwm.suckless.org/patches/fakefullscreen/dwm-fakefullscreen-20170508-ceac8c9.diff && patch < dwm-fakefullscreen-20170508-ceac8c9.diff  # apply second patch
-        sed -i "5c static const unsigned int gappx     = $gappx;        /* gaps between windows */"  # set gapp
-        sed -i "48c \#define MODKEY Mod4Mask" config.h  # change MODKEY for Windows
-        make -j && make install  # install
-        cd .. 
+	wget https://dl.suckless.org/dwm/dwm-6.2.tar.gz && tar xvf dwm-6.2.tar.gz && cd dwm-6.2  # download, untar archive; go to dir
+	wget https://dwm.suckless.org/patches/fullgaps/dwm-fullgaps-6.2.diff && patch < dwm-fullgaps-6.2.diff  # apply first patch
+	wget https://dwm.suckless.org/patches/fakefullscreen/dwm-fakefullscreen-20170508-ceac8c9.diff && patch < dwm-fakefullscreen-20170508-ceac8c9.diff  # apply second patch
+	sed -i "5c static const unsigned int gappx     = $gappx;        /* gaps between windows */"  # set gapp
+	sed -i "48c \#define MODKEY Mod4Mask" config.h  # change MODKEY for Windows
+	make -j && make install  # install
+	cd ..
 	### ST ###
 	git clone https://github.com/lukesmithxyz/st && cd st  # download; go to dir
-        make -j && make install  # install
-        cd ..
+	make -j && make install  # install
+	cd ..
 	rm -rf *  # wipe atoi dir
 fi
 
@@ -108,8 +106,8 @@ fi
 
 if [ "$vim" = "yes" ]; then
 	rm -rf /home/$nick/.vim  # preremove for reinstallation
-	mkdir -p /home/$nick/.vim/autoload && cd /home/$nick/.vim/autoload  # make dir; go to dir; download
-	wget https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+	mkdir -p /home/$nick/.vim/autoload  # make dir
+	wget https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim -O /home/$nick/.vim/autoload/plug.vim
 	chown -R $nick:$nick /home/$nick/.vim  # change permissions
 	if [ "$vimc" = 0 ]; then
 		apt install vim -y  # install default vim
@@ -122,16 +120,9 @@ if [ "$vim" = "yes" ]; then
 	fi
 fi
 
-if [ "$stools" = "yes" ]; then
-	# preremove for reinstallation
-	rm -rf /home/$nick/.oh-my-zsh
-	rm -rf /home/$nick/.zshrc
-	echo "Copy all your configs now to home directory"
-fi
-
 nvidia-xconfig --cool-bits=4  # activate NVIDIA FAN control
 
 apt update -y  # update
 apt upgrade -y  # upgrade
 
-echo 'sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"'  # 
+echo 'sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"'  # ohmyzsh installation command
