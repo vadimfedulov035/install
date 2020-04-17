@@ -51,10 +51,9 @@ if [ "$gnucc" = 0 ]; then
 elif [ "$gnucc" = 1 ]; then
 	wget https://ftpmirror.gnu.org/gcc/gcc-9.3.0/gcc-9.3.0.tar.gz
 	tar xvf gcc-9.3.0.tar.gz
-	cd gcc-9.1.0
+	cd gcc-9.3.0
 	contrib/download_prerequisites
-	cd ..
-	mkdir build && cd build
+	mkdir ../build && cd ../build
 	../gcc-9.3.0/configure -v --build=x86_64-linux-gnu --host=x86_64-linux-gnu --target=x86_64-linux-gnu --prefix=/usr --enable-checking=release --enable-languages=c,c++ --disable-multilib --program-suffix=-9.3
 	make -j
 	make install-strip
