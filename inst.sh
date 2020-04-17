@@ -4,6 +4,7 @@ printf "\n\n [?] Survey has been started\n\n\n"
 
 read -p "What is your nickname?: " nick
 read -p "Do you want to install tools? (yes/no): " stools
+read -p "Install or compile GCC? 0 or 1?: " gnucc
 read -p "Do you want to download libraries? (yes/no): " libs
 read -p "Do you want to install suckless utilities? (yes/no): " sless
 if [ "$sless" = "yes" ]; then
@@ -45,6 +46,20 @@ if [ "$stools" = "yes" ]; then
 	rm -rf lf* /tmp/gotop_dir
 fi
 
+if [ "$gnucc" = 0 ]; then
+	apt install build-essential -y
+elif [ "$gnucc" = 1 ]; then
+	wget https://ftpmirror.gnu.org/gcc/gcc-9.3.0/gcc-9.3.0.tar.gz
+	tar xvf gcc-9.3.0.tar.gz
+	cd gcc-9.1.0
+	contrib/download_prerequisites
+	cd ..
+	mkdir build && cd build
+	../gcc-9.3.0/configure -v --build=x86_64-linux-gnu --host=x86_64-linux-gnu --target=x86_64-linux-gnu --prefix=/usr --enable-checking=release --enable-languages=c,c++ --disable-multilib --program-suffix=-9.3
+	make -j
+	make install-strip
+fi
+
 if [ "$libs" = "yes" ]; then
 	rm -rf /home/"$nick"/LIBS
 	cd /home/"nick"/LIBS
@@ -63,7 +78,7 @@ if [ "$sless" = "yes" ]; then
         patch < dwm-fullgaps-6.2.diff
         patch < dwm-fakefullscreen-20170508-ceac8c9.diff
         rm *.diff
-        make -j$(nproc)
+        make -j
         sed -i "5c static const unsigned int gappx     = $gappx;        /* gaps between windows */"
         sed -i "48c \#define MODKEY Mod4Mask" config.h
         make install
