@@ -28,7 +28,7 @@ if [ "$stools" = "yes" ]; then
 	sed -i '15a deb http://deb.debian.org/debian buster-backports main contrib non-free' /etc/apt/sources.list
 	apt update -y
 	apt upgrade -y
-	apt install build-essential lightdm-gtk-greeter-settings nvidia-driver nvidia-smi nvidia-xconfig nvidia-cuda-toolkit ocl-icd-libopencl1 net-tools zsh tmux git info neofetch -y
+	apt install lightdm-gtk-greeter-settings nvidia-driver nvidia-smi nvidia-xconfig nvidia-cuda-toolkit ocl-icd-libopencl1 net-tools zsh tmux git info neofetch -y
 	apt install htop glances strace psmisc simple-scan curl wget lsof tree exiftool -y
 	apt install ffmpeg shntool feh sxiv mpv gimp imagemagick jpegoptim zathura -y
 	apt install adb fastboot transmission gmtp bleachbit redshift flameshot -y
@@ -142,8 +142,9 @@ if [ "$stools" = "yes" ]; then
 	echo "Copy all your configs now to home directory"
 fi
 
+nvidia-xconfig --cool-bits=4
+
 apt update -y
 apt upgrade -y
 
 echo 'sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"'
-echo 'nvidia-xconfid --cool-bits=4'
