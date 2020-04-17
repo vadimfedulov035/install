@@ -1,1 +1,3 @@
+xrdb /home/devbr/.Xdefaults
+exec compton
 exec dwm

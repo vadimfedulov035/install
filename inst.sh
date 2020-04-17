@@ -2,12 +2,26 @@
 
 printf "\n\n [?] Survey has been started\n\n\n"
 
-read -p "What is your nickname?: " nick
-read -p "Do you want to install tools? (yes/no): " stools
 read -p "Do you want to install GCC? (yes/no): " gtools
 if [ "$gtools" = "yes" ]; then
 	read -p "Install or compile GCC? 0 or 1?: " gtoolsc
+	if [ "$gtoolsc" = 0 ]; then
+		apt install build-essential -y  # install default build-pack
+	elif [ "$gtoolsc" = 1 ]; then
+		wget https://ftpmirror.gnu.org/gcc/gcc-9.3.0/gcc-9.3.0.tar.gz && tar xvf gcc-9.3.0.tar.gz && cd gcc-9.3.0  # download, untar archive; go to dir
+		contrib/download_prerequisites  # download prerequisites
+		mkdir ../build && cd ../build  # make build dir; go to build dir
+		../gcc-9.3.0/configure -v --build=x86_64-linux-gnu --host=x86_64-linux-gnu --target=x86_64-linux-gnu --prefix=/usr --enable-checking=release --enable-languages=c,c++ --disable-multilib --program-suffix=-9.3
+		make -j && make install-strip  # compile compiler and install
+		rm -rf /usr/bin/gcc && ln -s /usr/bin/gcc-9.3 /usr/bin/gcc  # make gcc-9.3 default system compiler
+        rm -rf gcc*
+        echo " [!] It's better to restart before installing other programs!\n\n\n"
+        exit 0
+	fi
 fi
+
+read -p "What is your nickname?: " nick
+read -p "Do you want to install tools? (yes/no): " stools
 read -p "Do you want to download libraries? (yes/no): " libs
 read -p "Do you want to install suckless utilities? (yes/no): " sless
 if [ "$sless" = "yes" ]; then
@@ -46,17 +60,6 @@ if [ "$libs" = "yes" ]; then
 fi
 
 if [ "$gtools" = "yes" ]; then
-	if [ "$gtoolsc" = 0 ]; then
-		apt install build-essential -y  # install default build-pack
-	elif [ "$gtoolsc" = 1 ]; then
-		wget https://ftpmirror.gnu.org/gcc/gcc-9.3.0/gcc-9.3.0.tar.gz && tar xvf gcc-9.3.0.tar.gz && cd gcc-9.3.0  # download, untar archive; go to dir
-		contrib/download_prerequisites  # download prerequisites
-		mkdir ../build && cd ../build  # make build dir; go to build dir
-		../gcc-9.3.0/configure -v --build=x86_64-linux-gnu --host=x86_64-linux-gnu --target=x86_64-linux-gnu --prefix=/usr --enable-checking=release --enable-languages=c,c++ --disable-multilib --program-suffix=-9.3
-		make -j && make install-strip  # compile compiler and install
-		cd ..
-		rm -rf /usr/bin/gcc && ln -s /usr/bin/gcc-9.3 /usr/bin/gcc  # make gcc-9.3 default system compiler
-	fi
 fi
 
 if [ "$sless" = "yes" ]; then
@@ -85,7 +88,6 @@ if [ "$torb" = "yes" ]; then
 fi
 
 if [ "$py" = "yes" ]; then
-	rm -rf /usr/bin/lsb_release
 	if [ "$pyc" = 0 ]; then
 		apt install python2.7-dev python3.7-dev -y  # install default python2 python3
 	elif [ "$pyc" = 1 ]; then
@@ -93,7 +95,6 @@ if [ "$py" = "yes" ]; then
 		wget https://www.python.org/ftp/python/3.8.2/Python-3.8.2.tar.xz && tar xvf Python-3.8.2.tar.xz && cd Python-3.8.2  # download, untar archive; go to dir
 		./configure --prefix=/usr --enable-loadable-sqlite-extensions --enable-shared --enable-optimizations --with-lto --enable-ipv6 --with-pydebug
 		make -j && make altinstall  # install
-		rm -rf /usr/bin/python3 && ln -s /usr/bin/python3.8 /usr/bin/python3  # make python3.8 default python3
 		cd ..
 	fi
 fi
