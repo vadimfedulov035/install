@@ -68,7 +68,7 @@ if [ "$libs" = "yes" ]; then
 fi
 
 if [ "$sless" = "yes" ]; then
-        apt install compton -y
+        apt install compton libxinerama-dev -y
         wget https://dl.suckless.org/dwm/dwm-6.2.tar.gz
         git clone https://github.com/lukesmithxyz/st
         tar xvf dwm-6.2.tar.gz
