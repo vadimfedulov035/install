@@ -46,6 +46,13 @@ if [ "$stools" = "yes" ]; then
 	rm -rf lf* /tmp/gotop_dir
 fi
 
+if [ "$libs" = "yes" ]; then
+	rm -rf /home/"$nick"/LIBS
+	cd /home/"nick"/LIBS
+	wget https://bootstrap.pypa.io/get-pip.py
+	wget https://developer.nvidia.com/compute/cuda/10.1/Prod/local_installers/cuda_10.1.105_418.39_linux.run
+fi
+
 if [ "$gnucc" = 0 ]; then
 	apt install build-essential -y
 elif [ "$gnucc" = 1 ]; then
@@ -57,13 +64,7 @@ elif [ "$gnucc" = 1 ]; then
 	../gcc-9.3.0/configure -v --build=x86_64-linux-gnu --host=x86_64-linux-gnu --target=x86_64-linux-gnu --prefix=/usr --enable-checking=release --enable-languages=c,c++ --disable-multilib --program-suffix=-9.3
 	make -j
 	make install-strip
-fi
-
-if [ "$libs" = "yes" ]; then
-	rm -rf /home/"$nick"/LIBS
-	cd /home/"nick"/LIBS
-	wget https://bootstrap.pypa.io/get-pip.py
-	wget https://developer.nvidia.com/compute/cuda/10.1/Prod/local_installers/cuda_10.1.105_418.39_linux.run
+	rm -rf gcc*
 fi
 
 if [ "$sless" = "yes" ]; then
