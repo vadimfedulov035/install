@@ -1,43 +1,43 @@
 #!/bin/sh
 
-printf "\n\n [?] Survey has been started\n\n\n"
+printf "\n\n [!] ATOIC\n        When time matters\n\n\n"
+printf "General instruction for GCC-8 (standard compiler):\n 1. Install GCC-8\n 2. Install tools and libraries\n 3. Install CUDA 10.1 using GCC-8\n 4. Install everything else\n\n\n"
+printf "General instruction for GCC-9:\n 1. Install GCC-8\n 2. Install tools and libraries\n 3. Install CUDA 10.1 using GCC-8\n 4. Compile GCC-9\n 5. Restart\n 6. Install everything else with GCC-9\n\n\n"
 
-read -p "Do you want to install GCC? (yes/no): " gtools
+read -p "What is your nickname?: " nick
+
+read -p "Do you want to install/compile GCC-(8/9)? (yes/no): " gtools
 if [ "$gtools" = "yes" ]; then
-	read -p "Install or compile GCC? 0 or 1?: " gtoolsc
+	read -p "Install standard or compile recent GCC? 0 or 1?: " gtoolsc
 	if [ "$gtoolsc" = 0 ]; then
 		apt install build-essential -y  # install default build-pack
 	elif [ "$gtoolsc" = 1 ]; then
 		wget https://ftpmirror.gnu.org/gcc/gcc-9.3.0/gcc-9.3.0.tar.gz && tar xvf gcc-9.3.0.tar.gz && cd gcc-9.3.0  # download, untar archive; go to dir
 		contrib/download_prerequisites  # download prerequisites
-		mkdir ../build && cd ../build  # make build dir; go to build dir
+		mkdir ../build && cd ../build  # make dir; go dir
 		../gcc-9.3.0/configure -v --build=x86_64-linux-gnu --host=x86_64-linux-gnu --target=x86_64-linux-gnu --prefix=/usr --enable-checking=release --enable-languages=c,c++ --disable-multilib --program-suffix=-9.3
 		make -j && make install-strip  # compile compiler and install
 		rm -rf /usr/bin/gcc && ln -s /usr/bin/gcc-9.3 /usr/bin/gcc  # make gcc-9.3 default system compiler
-        rm -rf gcc*
-        echo " [!] It's better to restart before installing other programs!\n\n\n"
-        exit 0
+		cd ..
+		rm -rf gcc* build
 	fi
 fi
 
-read -p "What is your nickname?: " nick
-read -p "Do you want to install tools? (yes/no): " stools
-read -p "Do you want to download libraries? (yes/no): " libs
+read -p "Do you want to install standard tools? (yes/no): " stools
+read -p "Do you want to download additional libraries? (yes/no): " libs
 read -p "Do you want to install suckless utilities? (yes/no): " sless
 if [ "$sless" = "yes" ]; then
         read -p "What gap size do you want in DWM? (num): " gappx
 fi
 read -p "Do you want to install TOR browser? (yes/no): " torb
 read -p "Do you want to install Python? (yes/no): " py
-if [ "$python" = "yes" ]; then
+if [ "$py" = "yes" ]; then
 	read -p "Install or compile Python? 0 or 1?: " pyc
 fi
-read -p "Do you want to install VIM as Python IDE? (yes/no): " vim
+read -p "Do you want to install VIM as C/Python IDE? (yes/no): " vim
 if [ "$vim" = "yes" ]; then
 	read -p "Install or compile VIM? 0 or 1?: " vimc
 fi
-
-printf "\n\n [.] Survey has been ended\n\n\n"
 
 if [ "$stools" = "yes" ]; then
 	sed -i '7c deb http://deb.debian.org/debian/ buster main contrib non-free' /etc/apt/sources.list
@@ -57,9 +57,6 @@ if [ "$libs" = "yes" ]; then
 	mkdir /home/$nick/libs
 	wget https://bootstrap.pypa.io/get-pip.py -O /home/$nick/libs/get-pip.py  # download get-pip.py
 	wget https://developer.nvidia.com/compute/cuda/10.1/Prod/local_installers/cuda_10.1.105_418.39_linux.run -O /home/$nick/libs/cuda_10.1.run  # download latest compatible CUDA
-fi
-
-if [ "$gtools" = "yes" ]; then
 fi
 
 if [ "$sless" = "yes" ]; then
