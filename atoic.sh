@@ -1,8 +1,8 @@
 #!/bin/sh
 
 printf "\n\n [!] ATOIC\n        When time matters\n\n\n"
-printf "General instruction for GCC-8 (standard compiler):\n 1. Install GCC-8\n 2. Install tools and libraries\n 3. Install CUDA 10.1 using GCC-8\n 4. Install everything else\n\n\n"
-printf "General instruction for GCC-9:\n 1. Install GCC-8\n 2. Install tools and libraries\n 3. Install CUDA 10.1 using GCC-8\n 4. Compile GCC-9\n 5. Restart\n 6. Install everything else with GCC-9\n\n\n"
+printf "General instruction for GCC-8 (standard compiler):\n 1. Install GCC-8\n 2. Install tools and libraries\n 3. Install CUDA 10.1 using GCC-8\n 4. Restart\n 5. Install everything else\n\n\n"
+printf "General instruction for GCC-9:\n 1. Install GCC-8\n 2. Install tools and libraries\n 3. Install CUDA 10.1 using GCC-8\n 4. Restart\n 5. Compile GCC-9\n 6. Restart\n 7. Install everything else\n\n\n"
 
 read -p "What is your nickname?: " nick
 
@@ -45,7 +45,7 @@ if [ "$stools" = "yes" ]; then
 	sed -i '16c deb http://deb.debian.org/debian buster-backports main contrib non-free' /etc/apt/sources.list
 	apt update -y  # update everything
 	apt upgrade -y  # upgrade everything
-	apt install lightdm lightdm-gtk-greeter lightdm-gtk-greeter-settings nvidia-driver nvidia-smi nvidia-xconfig nvidia-cuda-toolkit ocl-icd-libopencl1 -y  # download all GPU/X11 related stuff
+	apt install xorg xorg-dev lightdm lightdm-gtk-greeter lightdm-gtk-greeter-settings nvidia-driver nvidia-smi nvidia-xconfig nvidia-cuda-toolkit ocl-icd-libopencl1 -y  # download all GPU/X11 related stuff
 	apt install zsh git tmux net-tools info htop glances strace psmisc simple-scan curl wget lsof tree exiftool neofetch -y  # download programs for operating the system
 	apt install ffmpeg shntool feh sxiv mpv gimp imagemagick jpegoptim zathura -y  # download programs for working with media
 	apt install adb fastboot transmission gmtp bleachbit redshift flameshot -y  # download programs for working with other devices and keeping system safe
@@ -74,14 +74,15 @@ if [ "$sless" = "yes" ]; then
 	git clone https://github.com/lukesmithxyz/st && cd st  # download; go to dir
 	make -j && make install  # install
 	cd ..
+	rm -rf dwm* st
 fi
 
 if [ "$torb" = "yes" ]; then
 	apt install tor libdbus-glib-1-2 -y  # install needed prerequisites
-	rm -rf /home/$nick/.browser  # remove for reinstallation
 	wget https://www.torproject.org/dist/torbrowser/9.0.9/tor-browser-linux64-9.0.9_en-US.tar.xz && tar xvf tor-browser-linux64-9.0.9_en-US.tar.xz  # download, untar archive; 
 	mv -v tor-browser_en-US /home/$nick/.browser
 	chmod -R 755 /home/$nick/.browser && chown -R $nick:$nick /home/$nick/.browser  # change permissions
+	rm -rf tor*
 fi
 
 if [ "$py" = "yes" ]; then
@@ -93,11 +94,11 @@ if [ "$py" = "yes" ]; then
 		./configure --prefix=/usr --enable-loadable-sqlite-extensions --enable-shared --enable-optimizations --with-lto --enable-ipv6 --with-pydebug
 		make -j && make altinstall  # install
 		cd ..
+		rm -rf Python*
 	fi
 fi
 
 if [ "$vim" = "yes" ]; then
-	rm -rf /home/$nick/.vim  # remove for reinstallation
 	mkdir -p /home/$nick/.vim/autoload  # make dir
 	wget https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim -O /home/$nick/.vim/autoload/plug.vim
 	chown -R $nick:$nick /home/$nick/.vim  # change permissions
@@ -108,12 +109,17 @@ if [ "$vim" = "yes" ]; then
 		./configure --prefix=/usr --with-features=huge --enable-pythoninterp --enable-optimizations
 		make -j && make install  # install
 		cd ..
+		rm -rf vim
 	fi
 fi
 
-rm -rf lf* tor* dwm* st Python*  # remove all trash
-
 nvidia-xconfig --cool-bits=4  # activate NVIDIA FAN control
+
+cp -v ld.so.conf /etc
+cp -v Xsession /home/$nick/.Xsession
+cp -v Xdefaults /home/$nick/.Xdefaults
+cp -v tmux.conf /home/$nick/.tmux.conf
+[ "$vim" = "yes" ] && cp -v vimrc /home/$nick/.vim
 
 apt update -y  # update
 apt upgrade -y  # upgrade
