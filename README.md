@@ -1,3 +1,3 @@
-#ATOIC
+# ATOIC
 
-###AuTOmated Installation and Compilation script
+### AuTOmated Installation and Compilation script

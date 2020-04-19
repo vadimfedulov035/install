@@ -1,8 +1,8 @@
 #!/bin/sh
 
 printf "\n\n [!] ATOIC\n        When time matters\n\n\n"
-printf "General instruction for GCC-8 (standard compiler):\n 1. Install GCC-8\n 2. Install tools and libraries\n 3. Install CUDA 10.1 using GCC-8\n 4. Restart\n 5. Install everything else\n\n\n"
-printf "General instruction for GCC-9:\n 1. Install GCC-8\n 2. Install tools and libraries\n 3. Install CUDA 10.1 using GCC-8\n 4. Restart\n 5. Compile GCC-9\n 6. Restart\n 7. Install everything else\n\n\n"
+printf "General instruction for GCC-8 (standard compiler):\n 1. Install GCC-8\n 2. Install tools and libraries\n 3. Download and install CUDA 10.1 using GCC-8 (need to exit script)\n 4. Install everything else\n\n\n"
+printf "General instruction for GCC-9:\n 1. Install GCC-8\n 2. Install tools and libraries\n 3. Download and install CUDA 10.1 using GCC-8 (need to exit script)\n 4. Compile GCC-9\n 6. Install everything else\n\n\n"
 
 read -p "What is your nickname?: " nick
 
@@ -26,18 +26,12 @@ fi
 read -p "Do you want to install standard tools? (yes/no): " stools
 read -p "Do you want to download additional libraries? (yes/no): " libs
 read -p "Do you want to install suckless utilities? (yes/no): " sless
-if [ "$sless" = "yes" ]; then
-        read -p "What gap size do you want in DWM? (num): " gappx
-fi
+[ "$sless" = "yes" ] && read -p "What gap size do you want in DWM? (num): " gappx
 read -p "Do you want to install TOR browser? (yes/no): " torb
 read -p "Do you want to install Python? (yes/no): " py
-if [ "$py" = "yes" ]; then
-	read -p "Install or compile Python? 0 or 1?: " pyc
-fi
+[ "$py" = "yes" ] && read -p "Install or compile Python? 0 or 1?: " pyc
 read -p "Do you want to install VIM as C/Python IDE? (yes/no): " vim
-if [ "$vim" = "yes" ]; then
-	read -p "Install or compile VIM? 0 or 1?: " vimc
-fi
+[ "$vim" = "yes" ] && read -p "Install or compile VIM? 0 or 1?: " vimc
 
 if [ "$stools" = "yes" ]; then
 	sed -i '7c deb http://deb.debian.org/debian/ buster main contrib non-free' /etc/apt/sources.list
@@ -51,6 +45,7 @@ if [ "$stools" = "yes" ]; then
 	apt install adb fastboot transmission gmtp bleachbit redshift flameshot -y  # download programs for working with other devices and keeping system safe
 	wget https://github.com/gokcehan/lf/releases/download/r13/lf-linux-amd64.tar.gz && tar xvf lf-linux-amd64.tar.gz && mv -v lf /usr/bin  # download, untar archive; install program
 	chmod 755 /usr/bin/lf && chown root:root /usr/bin/lf  # change permissions to needed
+	rm -rf lf*
 fi
 
 if [ "$libs" = "yes" ]; then
