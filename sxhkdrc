@@ -1,0 +1,11 @@
+# Change Layout
+ctrl + {F1,F2}
+	setxkbmap {us,ru}
+
+# Make screenshot
+Print
+	flameshot gui
+
+# Lock or Shutdown
+ctrl + F12
+	dm-tool lock
