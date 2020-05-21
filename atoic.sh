@@ -39,7 +39,7 @@ if [ "$stools" = "yes" ]; then
 	sed -i '16c deb http://deb.debian.org/debian buster-backports main contrib non-free' /etc/apt/sources.list
 	apt update -y  # update everything
 	apt upgrade -y  # upgrade everything
-	apt install xorg xorg-dev lightdm lightdm-gtk-greeter lightdm-gtk-greeter-settings thunar nvidia-driver nvidia-smi nvidia-xconfig nvidia-cuda-toolkit ocl-icd-libopencl1 -y  # download all GPU/X11 related stuff
+	apt install xorg xorg-dev lightdm lightdm-gtk-greeter lightdm-gtk-greeter-settings thunar libexo-1-0 nvidia-driver nvidia-smi nvidia-xconfig nvidia-cuda-toolkit ocl-icd-libopencl1 -y  # download all GPU/X11 related stuff
 	apt install zsh git tmux net-tools info htop glances strace psmisc simple-scan cargo curl wget lsof tree exiftool neofetch -y  # download programs for operating the system
 	apt install pulseaudio pulsemixer ffmpeg shntool feh sxiv mpv gimp imagemagick jpegoptim zathura -y  # download programs for working with media
 	apt install keepassxc adb fastboot transmission gmtp bleachbit libreoffice redshift flameshot -y  # download programs for working with other devices and keeping system safe
