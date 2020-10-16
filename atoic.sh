@@ -44,8 +44,8 @@ if [ "$stools" = "yes" ]; then
 	apt install zsh git tmux net-tools info htop glances strace psmisc cargo curl wget lsof tree exiftool neofetch -y  # download programs for operating the system
 	apt install pulseaudio pulsemixer ffmpeg shntool feh sxiv mpv gimp imagemagick jpegoptim zathura -y  # download programs for working with media
 	apt install keepassxc adb fastboot transmission gmtp bleachbit redshift flameshot -y  # download programs for working with other devices and keeping system safe
-	wget https://github.com/gokcehan/lf/releases/download/r13/lf-linux-amd64.tar.gz && tar xvf lf-linux-amd64.tar.gz && mv -v lf /usr/bin  # download, untar archive; install program
-	wget https://github.com/cjbassi/ytop/releases/download/0.6.1/ytop-0.6.1-x86_64-unknown-linux-gnu.tar.gz && tar xvf ytop-0.6.1*.tar.gz && mv -v ytop /usr/bin  # download, untar archive; install program
+	wget https://github.com/gokcehan/lf/releases/download/r13/lf-linux-amd64.tar.gz && tar xvf lf-linux-amd64.tar.gz && mv -v lf /usr/bin  # download, untar archive; install file manager
+	wget https://github.com/cjbassi/ytop/releases/download/0.6.1/ytop-0.6.1-x86_64-unknown-linux-gnu.tar.gz && tar xvf ytop-0.6.1*.tar.gz && mv -v ytop /usr/bin  # download, untar archive; install observing program
 	chmod 755 /usr/bin/lf && chown root:root /usr/bin/lf  # change permissions to needed
 	rm -rf lf* ytop*
 fi
@@ -102,7 +102,6 @@ if [ "$vim" = "yes" ]; then
 	if [ "$vimc" = 0 ]; then
 		apt install vim -y  # install default vim
 	elif [ "$vimc" = 1 ]; then
-		apt install git -y
 		git clone https://github.com/vim/vim.git && cd vim  # download; go to dir
 		./configure --prefix=/usr --with-features=huge --enable-pythoninterp --enable-optimizations
 		make -j && make install  # install
