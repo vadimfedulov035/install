@@ -1,23 +1,24 @@
 #!/bin/sh
 
 printf "\n\n [!] ATOIC\n        When time matters\n\n\n"
-printf "General instruction for GCC-8 (standard compiler):\n 1. Install GCC-8\n 2. Install tools and libraries\n 3. Download and install CUDA 10.1 using GCC-8 (need to exit script)\n 4. Install everything else\n\n\n"
-printf "General instruction for GCC-9:\n 1. Install GCC-8\n 2. Install tools and libraries\n 3. Download and install CUDA 10.1 using GCC-8 (need to exit script)\n 4. Compile GCC-9\n 6. Install everything else\n\n\n"
 
 read -p "What is your nickname?: " nick
 
-read -p "Do you want to install/compile GCC-(8/9)? (yes/no): " gtools
+apt install wget curl
+exit  # experiment
+
+read -p "Do you want to install GCC? (yes/no): " gtools
 if [ "$gtools" = "yes" ]; then
 	read -p "Install standard or compile recent GCC? 0 or 1?: " gtoolsc
 	if [ "$gtoolsc" = 0 ]; then
 		apt install build-essential -y  # install default build-pack
 	elif [ "$gtoolsc" = 1 ]; then
-		wget https://ftpmirror.gnu.org/gcc/gcc-9.3.0/gcc-9.3.0.tar.gz && tar xvf gcc-9.3.0.tar.gz && cd gcc-9.3.0  # download, untar archive; go to dir
+		wget https://ftpmirror.gnu.org/gcc/gcc-10.2.0/gcc-10.2.0.tar.gz && tar xvf gcc-10.2.0.tar.gz && cd gcc-10.2.0  # download, untar archive; go to dir
 		contrib/download_prerequisites  # download prerequisites
 		mkdir ../build && cd ../build  # make dir; go dir
-		../gcc-9.3.0/configure -v --build=x86_64-linux-gnu --host=x86_64-linux-gnu --target=x86_64-linux-gnu --prefix=/usr --enable-checking=release --enable-languages=c,c++ --disable-multilib --program-suffix=-9.3
+		../gcc-10.2.0/configure -v --build=x86_64-linux-gnu --host=x86_64-linux-gnu --target=x86_64-linux-gnu --prefix=/usr --enable-checking=release --enable-languages=c,c++ --disable-multilib --program-suffix=-10.2
 		make -j && make install-strip  # compile compiler and install
-		rm -rf /usr/bin/gcc && ln -s /usr/bin/gcc-9.3 /usr/bin/gcc  # make gcc-9.3 default system compiler
+		rm -rf /usr/bin/gcc && ln -s /usr/bin/gcc-10.2 /usr/bin/gcc  # make gcc-10.2 default system compiler
 		cd ..
 		rm -rf gcc* build
 	fi
@@ -30,7 +31,7 @@ read -p "Do you want to install suckless utilities? (yes/no): " sless
 read -p "Do you want to install TOR browser? (yes/no): " torb
 read -p "Do you want to install Python? (yes/no): " py
 [ "$py" = "yes" ] && read -p "Install or compile Python? 0 or 1?: " pyc
-read -p "Do you want to install VIM as C/Python IDE? (yes/no): " vim
+read -p "Do you want to install VIM as C/C++/Python IDE? (yes/no): " vim
 [ "$vim" = "yes" ] && read -p "Install or compile VIM? 0 or 1?: " vimc
 
 if [ "$stools" = "yes" ]; then
@@ -40,11 +41,11 @@ if [ "$stools" = "yes" ]; then
 	apt update -y  # update everything
 	apt upgrade -y  # upgrade everything
 	apt install xorg xorg-dev lightdm lightdm-gtk-greeter lightdm-gtk-greeter-settings thunar libexo-1-0 nvidia-driver nvidia-smi nvidia-xconfig nvidia-cuda-toolkit ocl-icd-libopencl1 -y  # download all GPU/X11 related stuff
-	apt install zsh git tmux net-tools info htop glances strace psmisc simple-scan cargo curl wget lsof tree exiftool neofetch -y  # download programs for operating the system
+	apt install zsh git tmux net-tools info htop glances strace psmisc cargo curl wget lsof tree exiftool neofetch -y  # download programs for operating the system
 	apt install pulseaudio pulsemixer ffmpeg shntool feh sxiv mpv gimp imagemagick jpegoptim zathura -y  # download programs for working with media
-	apt install keepassxc adb fastboot transmission gmtp bleachbit libreoffice redshift flameshot -y  # download programs for working with other devices and keeping system safe
+	apt install keepassxc adb fastboot transmission gmtp bleachbit redshift flameshot -y  # download programs for working with other devices and keeping system safe
 	wget https://github.com/gokcehan/lf/releases/download/r13/lf-linux-amd64.tar.gz && tar xvf lf-linux-amd64.tar.gz && mv -v lf /usr/bin  # download, untar archive; install program
-    wget https://github.com/cjbassi/ytop/releases/download/0.6.1/ytop-0.6.1-x86_64-unknown-linux-gnu.tar.gz && tar xvf ytop-0.6.1*.tar.gz && mv -v ytop /usr/bin  # download, untar archive; install program
+	wget https://github.com/cjbassi/ytop/releases/download/0.6.1/ytop-0.6.1-x86_64-unknown-linux-gnu.tar.gz && tar xvf ytop-0.6.1*.tar.gz && mv -v ytop /usr/bin  # download, untar archive; install program
 	chmod 755 /usr/bin/lf && chown root:root /usr/bin/lf  # change permissions to needed
 	rm -rf lf* ytop*
 fi
@@ -75,7 +76,7 @@ fi
 
 if [ "$torb" = "yes" ]; then
 	apt install tor libdbus-glib-1-2 -y  # install needed prerequisites
-	wget https://www.torproject.org/dist/torbrowser/9.0.9/tor-browser-linux64-9.0.9_en-US.tar.xz && tar xvf tor-browser-linux64-9.0.9_en-US.tar.xz  # download, untar archive; 
+	wget https://www.torproject.org/dist/torbrowser/10.0.1/tor-browser-linux64-10.0.1_en-US.tar.xz && tar xvf tor-browser-linux64-10.0.1_en-US.tar.xz  # download, untar archive; 
 	mv -v tor-browser_en-US /home/$nick/.browser
 	chmod -R 755 /home/$nick/.browser && chown -R $nick:$nick /home/$nick/.browser  # change permissions
 	rm -rf tor*
@@ -86,7 +87,7 @@ if [ "$py" = "yes" ]; then
 		apt install python2.7-dev python3.7-dev -y  # install default python2 python3
 	elif [ "$pyc" = 1 ]; then
 		apt install zlib1g-dev libbz2-dev liblzma-dev libncurses5-dev libgdbm-dev libssl-dev libnss3-dev libreadline-dev libffi-dev tk-dev libsqlite3-dev -y  # install prerequisites
-		wget https://www.python.org/ftp/python/3.8.2/Python-3.8.2.tar.xz && tar xvf Python-3.8.2.tar.xz && cd Python-3.8.2  # download, untar archive; go to dir
+		wget https://www.python.org/ftp/python/3.9.0/Python-3.9.0.tar.xz && tar xvf Python-3.9.0.tar.xz && cd Python-3.9.0  # download, untar archive; go to dir
 		./configure --prefix=/usr --enable-loadable-sqlite-extensions --enable-shared --enable-optimizations --with-lto --enable-ipv6 --with-pydebug
 		make -j && make altinstall  # install
 		cd ..
@@ -101,6 +102,7 @@ if [ "$vim" = "yes" ]; then
 	if [ "$vimc" = 0 ]; then
 		apt install vim -y  # install default vim
 	elif [ "$vimc" = 1 ]; then
+		apt install git -y
 		git clone https://github.com/vim/vim.git && cd vim  # download; go to dir
 		./configure --prefix=/usr --with-features=huge --enable-pythoninterp --enable-optimizations
 		make -j && make install  # install
@@ -119,4 +121,4 @@ cp -v tmux.conf /home/$nick/.tmux.conf
 apt update -y  # update
 apt upgrade -y  # upgrade
 
-echo 'sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"'  # ohmyzsh installation command
+echo '\'sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"\' to install ohmyzsh'
