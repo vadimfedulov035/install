@@ -1,5 +1,5 @@
 xrdb /home/devbr/.Xdefaults
-xwallpaper --daemon --center /home/devbr/Pictures/.wallpapers/bridge.jpg
+xwallpaper --daemon --center /home/devbr/Pictures/.wallpapers/wallpaper.jpg
 xsetroot -name "Believe in yourself"
 rm -rf .ssh .zcomp* .xsession-errors*
 sxhkd &
