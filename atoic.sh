@@ -5,6 +5,16 @@ printf "\n\n [!] ATOIC\n        When time matters\n\n\n"
 read -p "What is your nickname?: " nick
 
 read -p "Do you want to install GCC? (yes/no): " gtools
+read -p "Do you want to install standard tools? (yes/no): " stools
+read -p "Do you want to download additional libraries? (yes/no): " libs
+read -p "Do you want to install suckless utilities? (yes/no): " sless
+[ "$sless" = "yes" ] && read -p "What gap size do you want in DWM? (num): " gappx
+read -p "Do you want to install TOR browser? (yes/no): " torb
+read -p "Do you want to install Python? (yes/no): " py
+[ "$py" = "yes" ] && read -p "Install or compile Python? 0 or 1?: " pyc
+read -p "Do you want to install VIM as C/C++/Python IDE? (yes/no): " vim
+[ "$vim" = "yes" ] && read -p "Install or compile VIM? 0 or 1?: " vimc
+
 if [ "$gtools" = "yes" ]; then
 	read -p "Install standard or compile recent GCC? 0 or 1?: " gtoolsc
 	if [ "$gtoolsc" = 0 ]; then
@@ -21,25 +31,15 @@ if [ "$gtools" = "yes" ]; then
 	fi
 fi
 
-read -p "Do you want to install standard tools? (yes/no): " stools
-read -p "Do you want to download additional libraries? (yes/no): " libs
-read -p "Do you want to install suckless utilities? (yes/no): " sless
-[ "$sless" = "yes" ] && read -p "What gap size do you want in DWM? (num): " gappx
-read -p "Do you want to install TOR browser? (yes/no): " torb
-read -p "Do you want to install Python? (yes/no): " py
-[ "$py" = "yes" ] && read -p "Install or compile Python? 0 or 1?: " pyc
-read -p "Do you want to install VIM as C/C++/Python IDE? (yes/no): " vim
-[ "$vim" = "yes" ] && read -p "Install or compile VIM? 0 or 1?: " vimc
-
 if [ "$stools" = "yes" ]; then
 	sed -i '7c deb http://deb.debian.org/debian/ buster main contrib non-free' /etc/apt/sources.list
 	sed -i '8c deb-src http://deb.debian.org/debian/ buster main contrib non-free' /etc/apt/sources.list
 	sed -i '16c deb http://deb.debian.org/debian buster-backports main contrib non-free' /etc/apt/sources.list
 	apt update -y  # update everything
 	apt upgrade -y  # upgrade everything
-	apt install xorg xorg-dev lightdm lightdm-gtk-greeter lightdm-gtk-greeter-settings thunar nvidia-driver nvidia-smi nvidia-xconfig nvidia-cuda-toolkit ocl-icd-libopencl1 -y  # download all GPU/X11 related stuff
-	apt install zsh tmux net-tools info htop glances strace psmisc curl lsof tree exiftool neofetch -y  # download programs for operating the system
-	apt install pulseaudio pulsemixer ffmpeg shntool feh sxiv mpv gimp imagemagick jpegoptim zathura -y  # download programs for working with media
+	apt install xorg xorg-dev lightdm lightdm-gtk-greeter lightdm-gtk-greeter-settings xwallpaper thunar nvidia-driver nvidia-smi nvidia-xconfig nvidia-cuda-toolkit ocl-icd-libopencl1 -y  # download all GPU/X11 related stuff
+	apt install zsh tmux net-tools info htop glances strace psmisc sxhkd curl lsof tree exiftool neofetch -y  # download programs for operating the system
+	apt install firefox-esr pulseaudio pulsemixer ffmpeg shntool feh sxiv mpv gimp imagemagick jpegoptim zathura -y  # download programs for working with media
 	apt install keepassxc adb fastboot transmission gmtp bleachbit redshift flameshot -y  # download programs for working with other devices and keeping system safe
 	wget https://github.com/gokcehan/lf/releases/download/r13/lf-linux-amd64.tar.gz && tar xvf lf-linux-amd64.tar.gz && mv -v lf /usr/bin  # download, untar archive; install file manager
 	wget https://github.com/cjbassi/ytop/releases/download/0.6.1/ytop-0.6.1-x86_64-unknown-linux-gnu.tar.gz && tar xvf ytop-0.6.1*.tar.gz && mv -v ytop /usr/bin  # download, untar archive; install observing program
@@ -54,7 +54,7 @@ if [ "$libs" = "yes" ]; then
 fi
 
 if [ "$sless" = "yes" ]; then
-	apt install compton libxinerama-dev -y  # install needed prerequisites
+	apt install compton libharfbuzz-dev libxinerama-dev -y  # install needed prerequisites
 	### DWM ###
 	wget https://dl.suckless.org/dwm/dwm-6.2.tar.gz && tar xvf dwm-6.2.tar.gz && cd dwm-6.2  # download, untar archive; go to dir
 	wget https://dwm.suckless.org/patches/fullgaps/dwm-fullgaps-6.2.diff && patch < dwm-fullgaps-6.2.diff  # apply first patch
@@ -111,10 +111,8 @@ nvidia-xconfig --cool-bits=4  # activate NVIDIA FAN control
 
 cp -v Xsession /home/$nick/.Xsession
 cp -v Xdefaults /home/$nick/.Xdefaults
-cp -v tmux.conf /home/$nick/.tmux.conf
+cp -v tmux.conf /home/$nick/.tmux.conf  # need to put sxhkd.conf to .config directory
 [ "$vim" = "yes" ] && cp -v vimrc /home/$nick/.vim
 
 apt update -y  # update
 apt upgrade -y  # upgrade
-
-echo '\'sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"\' to install ohmyzsh'
