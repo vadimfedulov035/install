@@ -14,7 +14,7 @@ read -p "Do you want to install TOR browser? (yes/no): " torb
 read -p "Do you want to install Python? (yes/no): " py
 [ "$py" = "yes" ] && read -p "Install or compile Python? 0 or 1?: " pyc
 read -p "Do you want to install VIM as C/C++/Python IDE? (yes/no): " vim
-[ "$vim" = "yes" ] && read -p "Install or compile VIM? 0 or 1?: " vimc
+[ "$vim" = "yes" ] && read -p "Install or compile VIM (either one)? 0 or 1?: " vimc
 
 if [ "$gtoolsc" = 0 ]; then
 	apt install build-essential -y  # install default build-pack
@@ -38,7 +38,7 @@ if [ "$stools" = "yes" ]; then
 	apt install xorg xorg-dev lightdm lightdm-gtk-greeter lightdm-gtk-greeter-settings xwallpaper thunar nvidia-driver nvidia-smi nvidia-xconfig nvidia-cuda-toolkit ocl-icd-libopencl1 -y  # download all GPU/X11 related stuff
 	apt install zsh tmux net-tools info htop glances strace psmisc sxhkd curl lsof tree exiftool neofetch -y  # download programs for operating the system
 	apt install firefox-esr pulseaudio pulsemixer ffmpeg shntool feh sxiv mpv gimp imagemagick jpegoptim zathura -y  # download programs for working with media
-	apt install keepassxc adb fastboot transmission gmtp bleachbit redshift flameshot -y  # download programs for working with other devices and keeping system safe
+	apt install keepassx adb fastboot transmission gmtp bleachbit redshift flameshot -y  # download programs for working with other devices and keeping system safe
 	wget https://github.com/gokcehan/lf/releases/download/r13/lf-linux-amd64.tar.gz && tar xvf lf-linux-amd64.tar.gz && mv -v lf /usr/bin  # download, untar archive; install file manager
 	wget https://github.com/cjbassi/ytop/releases/download/0.6.1/ytop-0.6.1-x86_64-unknown-linux-gnu.tar.gz && tar xvf ytop-0.6.1*.tar.gz && mv -v ytop /usr/bin  # download, untar archive; install observing program
 	chmod 755 /usr/bin/lf && chown root:root /usr/bin/lf  # change permissions to needed
@@ -114,3 +114,5 @@ cp -v tmux.conf /home/$nick/.tmux.conf  # need to put sxhkd.conf to .config dire
 
 apt update -y  # update
 apt upgrade -y  # upgrade
+
+echo 'sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"'
