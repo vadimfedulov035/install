@@ -5,6 +5,7 @@ printf "\n\n [!] ATOIC\n        When time matters\n\n\n"
 read -p "What is your nickname?: " nick
 
 read -p "Do you want to install GCC? (yes/no): " gtools
+[ "$gtools" = "yes" ] && read -p "Install or compile GCC? 0 or 1?: " gtoolsc
 read -p "Do you want to install standard tools? (yes/no): " stools
 read -p "Do you want to download additional libraries? (yes/no): " libs
 read -p "Do you want to install suckless utilities? (yes/no): " sless
@@ -15,20 +16,17 @@ read -p "Do you want to install Python? (yes/no): " py
 read -p "Do you want to install VIM as C/C++/Python IDE? (yes/no): " vim
 [ "$vim" = "yes" ] && read -p "Install or compile VIM? 0 or 1?: " vimc
 
-if [ "$gtools" = "yes" ]; then
-	read -p "Install standard or compile recent GCC? 0 or 1?: " gtoolsc
-	if [ "$gtoolsc" = 0 ]; then
-		apt install build-essential -y  # install default build-pack
-	elif [ "$gtoolsc" = 1 ]; then
-		wget https://ftpmirror.gnu.org/gcc/gcc-10.2.0/gcc-10.2.0.tar.gz && tar xvf gcc-10.2.0.tar.gz && cd gcc-10.2.0  # download, untar archive; go to dir
-		contrib/download_prerequisites  # download prerequisites
-		mkdir ../build && cd ../build  # make dir; go dir
-		../gcc-10.2.0/configure -v --build=x86_64-linux-gnu --host=x86_64-linux-gnu --target=x86_64-linux-gnu --prefix=/usr --enable-checking=release --enable-languages=c,c++ --disable-multilib --program-suffix=-10.2
-		make -j && make install-strip  # compile compiler and install
-		rm -rf /usr/bin/gcc && ln -s /usr/bin/gcc-10.2 /usr/bin/gcc  # make gcc-10.2 default system compiler
-		cd ..
-		rm -rf gcc* build
-	fi
+if [ "$gtoolsc" = 0 ]; then
+	apt install build-essential -y  # install default build-pack
+elif [ "$gtoolsc" = 1 ]; then
+	wget https://ftpmirror.gnu.org/gcc/gcc-10.2.0/gcc-10.2.0.tar.gz && tar xvf gcc-10.2.0.tar.gz && cd gcc-10.2.0  # download, untar archive; go to dir
+	contrib/download_prerequisites  # download prerequisites
+	mkdir ../build && cd ../build  # make dir; go dir
+	../gcc-10.2.0/configure -v --build=x86_64-linux-gnu --host=x86_64-linux-gnu --target=x86_64-linux-gnu --prefix=/usr --enable-checking=release --enable-languages=c,c++ --disable-multilib --program-suffix=-10.2
+	make -j && make install-strip  # compile compiler and install
+	rm -rf /usr/bin/gcc && ln -s /usr/bin/gcc-10.2 /usr/bin/gcc  # make gcc-10.2 default system compiler
+	cd ..
+	rm -rf gcc* build
 fi
 
 if [ "$stools" = "yes" ]; then
