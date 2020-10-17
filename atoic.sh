@@ -4,9 +4,6 @@ printf "\n\n [!] ATOIC\n        When time matters\n\n\n"
 
 read -p "What is your nickname?: " nick
 
-apt install wget curl
-exit  # experiment
-
 read -p "Do you want to install GCC? (yes/no): " gtools
 if [ "$gtools" = "yes" ]; then
 	read -p "Install standard or compile recent GCC? 0 or 1?: " gtoolsc
@@ -40,8 +37,8 @@ if [ "$stools" = "yes" ]; then
 	sed -i '16c deb http://deb.debian.org/debian buster-backports main contrib non-free' /etc/apt/sources.list
 	apt update -y  # update everything
 	apt upgrade -y  # upgrade everything
-	apt install xorg xorg-dev lightdm lightdm-gtk-greeter lightdm-gtk-greeter-settings thunar libexo-1-0 nvidia-driver nvidia-smi nvidia-xconfig nvidia-cuda-toolkit ocl-icd-libopencl1 -y  # download all GPU/X11 related stuff
-	apt install zsh git tmux net-tools info htop glances strace psmisc cargo curl wget lsof tree exiftool neofetch -y  # download programs for operating the system
+	apt install xorg xorg-dev lightdm lightdm-gtk-greeter lightdm-gtk-greeter-settings thunar nvidia-driver nvidia-smi nvidia-xconfig nvidia-cuda-toolkit ocl-icd-libopencl1 -y  # download all GPU/X11 related stuff
+	apt install zsh tmux net-tools info htop glances strace psmisc curl lsof tree exiftool neofetch -y  # download programs for operating the system
 	apt install pulseaudio pulsemixer ffmpeg shntool feh sxiv mpv gimp imagemagick jpegoptim zathura -y  # download programs for working with media
 	apt install keepassxc adb fastboot transmission gmtp bleachbit redshift flameshot -y  # download programs for working with other devices and keeping system safe
 	wget https://github.com/gokcehan/lf/releases/download/r13/lf-linux-amd64.tar.gz && tar xvf lf-linux-amd64.tar.gz && mv -v lf /usr/bin  # download, untar archive; install file manager
